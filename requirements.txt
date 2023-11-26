@@ -1,0 +1,3 @@
+pyaudio
+ibm_watson
+googletrans

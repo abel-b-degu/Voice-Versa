@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:Wght@400;500;600");
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: boarder-box;
+    font-family: 'Poppins', sans-serif;
+}
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: lightgoldenrodyellow;
+}
+.wrapper{
+    border-radius: 5px;
+    border: 1px solid #bbb;
+
+}
+.container{
+    width: 600px;
+    background: #fff;
+    border-radius: 7px;
+    padding: 30px;
+}
+.wrapper .text-input{
+    border-bottom: 1px solid #bbb;
+    display: flex;
+}
+
+.text-input .to-text{
+    border-radius: 0px;
+    border-left: 1px solid #bbb;
+}
+.text-input textarea{
+    height: 250px;
+    width: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: 18px;
+    border-radius: 5px;
+    background: none;
+    padding: 10px 15px;
+}
+.controls, li, .icons{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.controls .row.from .icons{
+    border-right: 1px solid #bbb;
+    padding-left: 15px;
+}
+.controls .row.to .icons{
+    border-left: 1px solid #bbb;
+    padding-left: 15px;
+}
+.controls{
+    list-style: none;
+    display: flex;
+    align-items: center;
+    padding: 12px 0px;
+    justify-content: space-between;
+    width: 100%;
+}
+.controls .exchange{
+    color: #9f9f9f;
+    font-size: 16px;
+    cursor: pointer;
+    padding-left: 0px 0px;
+}
+.controls .exchange li{
+    color: #9f9f9f;
+    font-size: 16px;
+    cursor: pointer;
+    padding-right: 12px;
+}
+.controls .icons{
+    width: 38%;
+}
+.controls .icons i{
+    width: 50px;
+    color: #9f9f9f;
+    font-size: 14px;
+    cursor: pointer;
+}
+.controls .row select{
+    border: none;
+    outline: none;
+    font-size: 18px;
+    background: none;
+}
+.container button{
+    width: 100%;
+    padding: 14px;
+    margin-top: 20px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 17px;
+    border-radius: 5px;
+    background-color: #5372f0;
+
+}
