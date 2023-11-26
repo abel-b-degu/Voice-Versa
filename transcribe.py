@@ -28,6 +28,11 @@ BUF_MAX_SIZE = CHUNK * 10
 # Buffer to store audio
 q = Queue(maxsize=int(round(BUF_MAX_SIZE / CHUNK)))
 
+# Variables for recording the speech
+FORMAT = pyaudio.paInt16
+CHANNELS = 1
+RATE = 44100
+
 # Create an instance of AudioSource
 audio_source = AudioSource(q, True, True)
 
@@ -68,61 +73,59 @@ class MyRecognizeCallback(RecognizeCallback):
     def on_close(self):
         print("Connection closed")
 
-# this function will initiate the recognize service and pass in the AudioSource
-def recognize_using_weboscket(*args):
-    mycallback = MyRecognizeCallback()
-    speech_to_text.recognize_using_websocket(audio=audio_source,
-                                             content_type='audio/l16; rate=44100',
-                                             recognize_callback=mycallback,
-                                             interim_results=True)
-
-###############################################
-#### Prepare the for recording using Pyaudio ##
-###############################################
-
-# Variables for recording the speech
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 44100
-
-# define callback for pyaudio to store the recording in queue
-def pyaudio_callback(in_data, frame_count, time_info, status):
+def transcribe_audio(audio_file):
+    stream = None
+    
     try:
-        q.put(in_data)
-    except Full:
-        pass # discard
-    return (None, pyaudio.paContinue)
+        
+        ###############################################
+        #### Prepare the for recording using Pyaudio ##
+        ###############################################
+        
+        # define callback for pyaudio to store the recording in queue
+        def pyaudio_callback(in_data, frame_count, time_info, status):
+            try:
+                q.put(in_data)
+            except Full:
+                pass # discard
+            return (None, pyaudio.paContinue)
+        
+        # instantiate pyaudio
+        audio = pyaudio.PyAudio()
 
-# instantiate pyaudio
-audio = pyaudio.PyAudio()
+        # open stream using callback
+        stream = audio.open(
+            format=FORMAT,
+            channels=CHANNELS,
+            rate=RATE,
+            input=True,
+            frames_per_buffer=CHUNK,
+            stream_callback=pyaudio_callback,
+            start=False
+        )
 
-# open stream using callback
-stream = audio.open(
-    format=FORMAT,
-    channels=CHANNELS,
-    rate=RATE,
-    input=True,
-    frames_per_buffer=CHUNK,
-    stream_callback=pyaudio_callback,
-    start=False
-)
+        # this will initiate the recognize service and pass in the AudioSource
+        mycallback = MyRecognizeCallback()
+        audio_source.clear()
+        audio_source.attach_q(q)
+        speech_to_text.recognize_using_websocket(audio=audio_source,
+                                                content_type='audio/l16; rate=44100',
+                                                recognize_callback=mycallback,
+                                                interim_results=True)
 
-#########################################################################
-#### Start the recording and start service to recognize the stream ######
-#########################################################################
+        #########################################################################
+        #### Start the recording and start service to recognize the stream ######
+        #########################################################################
 
-print("Enter CTRL+C to end recording...")
-stream.start_stream()
+        print("Enter CTRL+C to end recording...")
+        stream.start_stream()
 
-try:
-    recognize_thread = Thread(target=recognize_using_weboscket, args=())
-    recognize_thread.start()
+        while stream.is_active():
+                pass
 
-    while True:
-        pass
-except KeyboardInterrupt:
-    # stop recording
-    stream.stop_stream()
-    stream.close()
-    audio.terminate()
-    audio_source.completed_recording()
+    finally:
+            if stream:
+                stream.stop_stream()
+                stream.close()
+                audio.terminate()
+                audio_source.completed_recording()
