@@ -18,7 +18,7 @@
                 <li class="row from">
                     <div class="icons">
                         <i class="fas fa-microphone"></i>
-                        <i class="fas fa-copy"></i>
+                        <i class="fas fa-copy" onclick="copyText('transcription')"></i>
                     </div>
                     <select id="source-lang">
                         {% for code, name in languages %}
@@ -34,7 +34,7 @@
                         {% endfor %}
                     </select>
                     <div class="icons">
-                        <i class="fas fa-copy"></i>
+                        <i class="fas fa-copy" onclick="copyText('translation')"></i>
                     </div>
                 </li>
             </ul>
@@ -91,6 +91,20 @@
                 console.error('Translation error:', error);
                 throw error;
             });
+        }
+
+        // Function to copy text to clipboard using Clipboard API
+        function copyText(id) {
+            var textArea = id == 'transcription' ? document.getElementById('transcription') : document.getElementById('translation')
+            var textToCopy = textArea.value;
+
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    console.log('Text successfully copied to clipboard');
+                })
+                .catch(err => {
+                    console.error('Unable to copy text to clipboard', err);
+                });
         }
 
     </script>
