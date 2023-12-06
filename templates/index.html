@@ -21,6 +21,7 @@
                         <i class="fas fa-copy" onclick="copyText('transcription')"></i>
                     </div>
                     <select id="source-lang">
+                        <option value="">&#40;Auto Detect&#41;</option>
                         {% for code, name in languages %}
                             <option value="{{ code }}"> {{ name.capitalize() }}</option>
                         {% endfor %}
