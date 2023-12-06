@@ -8,10 +8,34 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 </head>
 <body>
+    <div id="transcription"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+    
+        // Event handler for receiving transcriptions
+        socket.on('transcription', function(data) {
+            document.getElementById('transcription').value += data.transcription + '\n';
+        });
+    
+        // Event handler for handling transcription errors
+        socket.on('transcription_error', function(data) {
+            alert('Error: ' + data.error);
+        });
+    
+        function startTranscription() {
+            socket.emit('start_transcription');
+        }
+
+        function stopTranscription() {
+        }
+
+    </script>
     <div class="container">
         <div class="wrapper">
             <div class="text-input">
-                <textarea class="from-text" placeholder="Enter text"></textarea>
+                <textarea class="from-text" id="transcription" placeholder="Enter text"></textarea>
                 <textarea class="to-text" placeholder="Translation" readonly disabled></textarea>
             </div>
             <ul class="controls">
@@ -32,7 +56,9 @@
                         <option value="hi-IN">Hindi</option>
                     </select>
                     <div class="icons">
-                        <i class="fas fa-volume-up"></i>
+                        <button id="microphoneBtn" onclick="startTranscription()">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
                         <i class="fas fa-copy"></i>
                     </div>
                 </li>

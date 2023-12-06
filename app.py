@@ -1,31 +1,23 @@
-from flask import Flask, render_template, request, jsonify
-from transcribe import transcribe_audio
+from flask import Flask, render_template, request
+from flask_socketio import SocketIO
+from transcribe import start_transcription, set_socketio_instance
 from threading import Thread
 
 app = Flask(__name__)
+socketio = SocketIO(app, async_mode='gevent')
+
+set_socketio_instance(socketio)
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/transcribe', methods=['POST'])
-def transcribe():
-    if 'audio' not in request.files:
-        return jsonify({'error': 'No audio file provided'})
-
-    audio_file = request.files['audio']
-
-    if audio_file.filename == '':
-        return jsonify({'error': 'No selected file'})
-
+@socketio.on('start_transcription')
+def handle_start_transcription():
     try:
-        transcription_thread = Thread(
-            target=transcribe_audio, args=(audio_file,)
-        )
-        transcription_thread.start()
-        return jsonify({'message': 'Transcription started'})
+        start_transcription()
     except Exception as e:
-        return jsonify({'error': str(e)})
+        socketio.emit('transcription_error', {'error': str(e)})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app, debug=True)
