@@ -4,13 +4,11 @@ from ibm_watson.websocket import RecognizeCallback, AudioSource
 from threading import Thread
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from queue import Queue, Full
-from flask_socketio import SocketIO
 
 from config import watson_auth_key
 
 # Flask-SocketIO instance
 # socketio = SocketIO(message_queue='redis://', async_mode='gevent')
-socketio = None
 
 # Initialize queue to store the recordings
 CHUNK = 1024
@@ -25,9 +23,14 @@ authenticator = IAMAuthenticator(watson_auth_key)
 speech_to_text = SpeechToTextV1(authenticator=authenticator)
 
 class MyRecognizeCallback(RecognizeCallback):
+    def __init__(self, socketio):
+        super().__init__()
+        self.socketio = socketio
+
     def on_transcription(self, transcript):
         transcription = transcript[0]['transcript']
-        socketio.emit('transcription', {'transcription': transcription})
+        # print(f'Transcription {transcription}')
+        self.socketio.emit('update_transcription', {'transcription': transcription})
 
     def on_connected(self):
         print('Connection was successful')
@@ -39,16 +42,16 @@ class MyRecognizeCallback(RecognizeCallback):
         print('Service is listening')
 
     def on_hypothesis(self, hypothesis):
-        print(hypothesis)
+        print(f'Hypothesis: {hypothesis}')
 
     def on_data(self, data):
-        print(data[0]['transcript'])
+        print(f"Data: {data[0]['transcript']}")
 
     def on_close(self):
         print("Connection closed")
 
-def recognize_using_websocket():
-    mycallback = MyRecognizeCallback()
+def recognize_using_websocket(socketio):
+    mycallback = MyRecognizeCallback(socketio)
     speech_to_text.recognize_using_websocket(audio=audio_source,
                                              content_type='audio/l16; rate=44100',
                                              recognize_callback=mycallback,
@@ -61,7 +64,7 @@ def pyaudio_callback(in_data, frame_count, time_info, status):
         pass  # discard
     return (None, pyaudio.paContinue)
 
-def start_transcription():
+def start_transcription(socketio):
     audio = pyaudio.PyAudio()
     stream = audio.open(
         format=pyaudio.paInt16,
@@ -76,17 +79,14 @@ def start_transcription():
     stream.start_stream()
 
     try:
-        recognize_thread = Thread(target=recognize_using_websocket, args=())
+        recognize_thread = Thread(target=recognize_using_websocket, args=(socketio,))
         recognize_thread.start()
-
-        while True:
-            pass
+        recognize_thread.join()
     except KeyboardInterrupt:
         stream.stop_stream()
         stream.close()
         audio.terminate()
         audio_source.completed_recording()
 
-def set_socketio_instance(si):
-    global socketio
-    socketio = si
+# if __name__ == '__main__':
+#     start_transcription()

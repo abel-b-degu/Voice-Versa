@@ -1,6 +1,9 @@
 flask
-flask-socketio
+flask-socketio==4.2.0
 PyAudio
 ibm_watson
-googletrans
+googletrans==4.0.0rc1
 gevent
+flask-cors
+gevent-websocket==0.10.1
+eventlet
