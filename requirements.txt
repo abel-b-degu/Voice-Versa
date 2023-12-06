@@ -1,3 +1,6 @@
-pyaudio
+flask
+flask-socketio
+PyAudio
 ibm_watson
 googletrans
+gevent
