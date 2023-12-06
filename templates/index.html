@@ -11,7 +11,7 @@
     <div class="container">
         <div class="wrapper">
             <div class="text-input">
-                <textarea class="from-text" id="transcription" placeholder="Enter text"></textarea>
+                <textarea class="from-text" id="transcription" placeholder="Enter text" onkeydown="checkEnterKey(event)"></textarea>
                 <textarea class="to-text" id="translation" placeholder="Translation" readonly disabled></textarea>
             </div>
             <ul class="controls">

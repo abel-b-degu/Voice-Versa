@@ -80,3 +80,12 @@ function speakText() {
 
     speechSynthesis.speak(utterance);
 }
+
+function checkEnterKey(event) {
+    if (event.key === 'Enter') {
+        // Call the translation function when "Enter" is pressed
+        displayTranslation();
+        // Prevent the default behavior (e.g., newline in the textarea)
+        event.preventDefault();
+    }
+}
