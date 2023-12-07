@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:Wght@400;500;600");
 * {
     margin: 0;
     padding: 0;
@@ -10,7 +11,7 @@ body{
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: lightgoldenrodyellow;
+    background: rgb(137, 137, 126);
 }
 .wrapper{
     border-radius: 5px;
@@ -18,7 +19,7 @@ body{
 
 }
 .container{
-    width: 600px;
+    width: 800px;
     background: #fff;
     border-radius: 7px;
     padding: 30px;
@@ -56,7 +57,7 @@ body{
     border-left: 1px solid #bbb;
     padding-left: 15px;
 }
-.controls{
+.controls {
     list-style: none;
     display: flex;
     align-items: center;
@@ -64,20 +65,21 @@ body{
     justify-content: space-between;
     width: 100%;
 }
+
 .controls .exchange{
     color: #9f9f9f;
     font-size: 16px;
     cursor: pointer;
-    padding-left: 0px 0px;
+    padding: 0;
 }
 .controls .exchange li{
     color: #9f9f9f;
     font-size: 16px;
     cursor: pointer;
-    padding-right: 12px;
+    padding-right: 8px;
 }
 .controls .icons{
-    width: 38%;
+    width: 34%;
 }
 .controls .icons i{
     width: 50px;
@@ -89,7 +91,10 @@ body{
     border: none;
     outline: none;
     font-size: 18px;
-    background: none;
+    background-color: #e3d6d6;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 145px;
 }
 .container button{
     width: 100%;
