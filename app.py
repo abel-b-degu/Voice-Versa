@@ -1,6 +1,4 @@
 from flask import Flask, render_template, request, jsonify
-# from flask_socketio import SocketIO, emit
-# from transcribe import start_transcription
 from flask_cors import CORS
 from threading import Thread
 import googletrans
@@ -8,7 +6,6 @@ from googletrans import Translator
 
 app = Flask(__name__)
 CORS(app)
-# socketio = SocketIO(app, async_mode='gevent')
 
 translator = Translator()
 
@@ -34,16 +31,5 @@ def translate():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# @socketio.on('start_transcription')
-# def handle_start_transcription():
-#     try:
-#         recognize_thread = Thread(target=start_transcription, args=(socketio,))
-#         recognize_thread.start()
-
-#     except Exception as e:
-#         emit('transcription_error', {'error': str(e)})
-
-
 if __name__ == '__main__':
-    # socketio.run(app, debug=True)
     app.run(debug=True)

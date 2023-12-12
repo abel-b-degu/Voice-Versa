@@ -47,25 +47,5 @@
         <button onclick="displayTranslation()">Translate Text</button>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
-    <script>
-        /*
-        var socket = io.connect('http://127.0.0.1:500');
-
-        socket.on('update_transcription', function(data) {
-            document.getElementById('transcriptionDisplay').innerHTML += data.transcription + '<br>';
-        });
-
-        socket.on('transcription_error', function(data) {
-            alert('Error: ' + data.error);
-        });
-
-        function startTranscription() {
-            socket.emit('start_transcription');
-        }
-        */
-
-
-    </script>
 </body>
 </html>
