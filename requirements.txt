@@ -1,5 +1,5 @@
 flask
-flask-socketio==4.2.0
+flask-socketio
 PyAudio
 ibm_watson
 googletrans==4.0.0rc1
