@@ -88,5 +88,5 @@ def start_transcription(socketio):
         audio.terminate()
         audio_source.completed_recording()
 
-# if __name__ == '__main__':
-#     start_transcription()
+if __name__ == '__main__':
+    start_transcription()

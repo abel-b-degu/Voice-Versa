@@ -1,7 +1,7 @@
 import googletrans
 from googletrans import Translator
 
-# print(googletrans.LANGUAGES)
+print(len(googletrans.LANGUAGES))
 
 
 translator = Translator()
