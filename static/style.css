@@ -91,8 +91,10 @@ body{
     border: none;
     outline: none;
     font-size: 18px;
-    background-color: #e3d6d6;
+    /* background-color: #e3d6d6; */
+    background-color: #eee;
     cursor: pointer;
+    padding: .15rem;
     border-radius: 5px;
     width: 145px;
 }
