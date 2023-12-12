@@ -3,7 +3,7 @@
 ## Project Setup Directions
 
 1. Clone the repository
-2. Create a virtual environment
+2. Create a virtual environment (Delete if there is an existing one that is causing issues)
   `python3 -m venv venv`
 3. Activate the virtual environment
    Windows: `./venv/Scripts/Activate.ps1`
